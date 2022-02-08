@@ -37,7 +37,7 @@ public class Review {
       Scanner input = new Scanner(new File("positiveAdjectives.txt"));
       while(input.hasNextLine()){
         String temp = input.nextLine().trim();
-        System.out.println(temp);
+        // System.out.println(temp);
         posAdjectives.add(temp);
       }
       input.close();
@@ -90,14 +90,14 @@ public class Review {
   {
     try
     {
-      return sentiment.get(word.toLowerCase());
+      return sentiment.get(removePunctuation(word.toLowerCase()));
     }
     catch(Exception e)
     {
       return 0;
     }
   }
-  
+
   public static double totalSentiment(String fileName){
     String review = textToString(fileName);
     double total = 0.0;
@@ -106,15 +106,65 @@ public class Review {
     {
       int space = review.indexOf(" ");
       String word = review.substring(0, space);
-      double sentiment =  sentimentVal(word);
+      double sentiment = sentimentVal(word);
       total += sentiment;
 
       review = review.substring(space+1);
+
     }
-    total += sentimentVal(review);
+      total += sentimentVal(review);
     return total;
   }
 
+  public static int starRating(String fileName){
+	  //get total sentiment
+	  double sentiment = totalSentiment(fileName);
+	  //check sentiment against thresholds
+	  //return appropriate star starRating
+	  if (sentiment > 20){
+		  return 5;
+	  } else if (sentiment > 10){
+		  return 4;
+	  } else if (sentiment > 0){
+		  return 3;
+	  } else if (sentiment > -10){
+		  return 2;
+	  } else{
+		  return 1;
+	  }
+
+  }
+
+  public static String fakeReview(String fileName){
+	  //get the review in a string
+	  String review = textToString(fileName);
+
+	  //empty string for new review
+	  String newReview = "";
+
+	  //loop through the string
+	  while (review.indexOf("*")>0 && review.length()>0)
+	  {
+		  //look for *, 
+		  int starLoc = review.indexOf("*");
+	  	  //add everything before the * to new review
+		  newReview += review.substring(0, starLoc);
+		  //add a random adjective to new review
+		  newReview += randomAdjective();
+		  //cut off old review through starred adjective
+		  int spaceAfterStar = review.indexOf(" ", starLoc);
+		  review = review.substring(spaceAfterStar);
+
+		//   System.out.println("__");
+		//   System.out.println(newReview);
+
+	  }
+	  newReview += review;
+
+	  return newReview;
+	  
+  }
+  
   /**
    * Returns the ending punctuation of a string, or the empty string if there is none 
    */
