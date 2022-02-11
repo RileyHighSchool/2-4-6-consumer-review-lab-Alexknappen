@@ -223,10 +223,55 @@ public class Review {
   public static String randomAdjective()
   {
     boolean positive = Math.random() < .5;
-    if(positive){
+    if(positive)
+    {
       return randomPositiveAdj();
-    } else {
+    } 
+    else 
+    {
       return randomNegativeAdj();
     }
   }
+
+  public static String Dyslexia(String input)
+  {
+    String output = "";
+  for (int i = 0; i < input.length(); i += 1)
+  {
+    String letter = input.substring(i, i + 1);
+    if ((letter.equals("d") || letter.equals("b") || letter.equals("p") || letter.equals("q")))
+    {
+      double rand = Math.random();
+      if (rand < .25)
+      {
+        output += "b";
+      }
+      else if (rand < .5)
+      {
+        output += "p";
+      }
+      else if (rand < .75)
+      {
+        output += "d";
+      }
+      else
+      {
+        output += "q";
+      }
+      
+    }
+    else {
+      output += letter;
+    }
+    
+  }
+  return output;
+}
+public static String DyslexicReview(String fileName)
+{
+  String input = textToString(fileName);
+
+  return Dyslexia(input);
+
+}
 }
